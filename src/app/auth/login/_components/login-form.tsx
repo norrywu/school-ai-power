@@ -2,14 +2,10 @@
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import {
-  Field,
-  FieldDescription,
-  FieldGroup,
-} from "@/components/ui/field";
+import { Field, FieldDescription, FieldGroup } from "@/components/ui/field";
 import { FormField } from "@/components/common/form";
 import { PasswordInput } from "@/components/common/password-input";
-import { LOGIN_MESSAGES, AUTH_ROUTES } from "@/constants/auth-constant";
+import { LOGIN_MESSAGES } from "@/constants/auth-constant";
 import { useLoginForm } from "@/hooks/use-login-form";
 
 export function LoginForm({
@@ -71,7 +67,7 @@ export function LoginForm({
 
         <FieldDescription className="text-center">
           {LOGIN_MESSAGES.noAccountText}{" "}
-          <a href={AUTH_ROUTES.register} className="underline underline-offset-4">
+          <a href="#" className="underline underline-offset-4">
             {LOGIN_MESSAGES.signUpText}
           </a>
         </FieldDescription>

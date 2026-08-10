@@ -58,3 +58,19 @@ export async function signInAction(
 
   redirect(AUTH_ROUTES.home);
 }
+
+export async function signOutAction(): Promise<void> {
+  try {
+    await auth.api.signOut({
+      headers: await headers(),
+    });
+  } catch {
+    // Tetap redirect meskipun terjadi error pada proses sign out
+  }
+
+  redirect(AUTH_ROUTES.login);
+}
+
+/** Alias yang dipakai `NavUser`. */
+export const logout = signOutAction;
+

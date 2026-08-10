@@ -36,6 +36,12 @@
       "sourceType": "github",
       "skillPath": "better-auth/twoFactor/SKILL.md",
       "computedHash": "cfe69aad10d4d7b397fbc101630afd9361b385b5f6f83056f33f36ab3b736fcb"
+    },
+    "zustand": {
+      "source": "oakoss/agent-skills",
+      "sourceType": "github",
+      "skillPath": "skills/zustand/SKILL.md",
+      "computedHash": "a7e588048306993d2f3e1b6ebfb55ca98a4631433718d0ade54f57f3013ac290"
     }
   }
 }
