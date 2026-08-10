@@ -2,6 +2,7 @@ import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "@better-auth/drizzle-adapter";
 import { drizzle } from "drizzle-orm/neon-http";
 import { neon } from "@neondatabase/serverless";
+import { nextCookies } from "better-auth/next-js";
 import * as schema from "../src/db/auth-schema";
 import { databaseUrl, betterAuthSecret } from "../src/environments";
 
@@ -17,4 +18,5 @@ export const auth = betterAuth({
   emailAndPassword: {
     enabled: true,
   },
+  plugins: [nextCookies()],
 });
