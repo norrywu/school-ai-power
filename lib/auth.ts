@@ -3,6 +3,7 @@ import { drizzleAdapter } from "@better-auth/drizzle-adapter";
 import { drizzle } from "drizzle-orm/neon-http";
 import { neon } from "@neondatabase/serverless";
 import { nextCookies } from "better-auth/next-js";
+import { admin } from "better-auth/plugins/admin";
 import * as schema from "../src/db/auth-schema";
 import { databaseUrl, betterAuthSecret } from "../src/environments";
 
@@ -18,15 +19,11 @@ export const auth = betterAuth({
   emailAndPassword: {
     enabled: true,
   },
-  user: {
-    additionalFields: {
-      role: {
-        type: "string",
-        required: false,
-        defaultValue: "teacher",
-        input: false,
-      },
-    },
-  },
-  plugins: [nextCookies()],
+  plugins: [
+    nextCookies(),
+    admin({
+      defaultRole: "teacher",
+      adminRoles: ["admin"],
+    }),
+  ],
 });

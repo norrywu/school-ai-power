@@ -45,17 +45,12 @@ const adminMenu: NavItem[] = [
   {
     title: "Kehadiran",
     icon: CalendarCheck,
-    items: [
-      { title: "Rekap Kehadiran", url: "/APP/admin/attendance/recap" },
-    ],
+    items: [{ title: "Rekap Kehadiran", url: "/APP/admin/attendance/recap" }],
   },
   {
     title: "Pengguna",
     icon: UserCog,
-    items: [
-      { title: "Guru/Ustadz", url: "/APP/admin/users/teachers" },
-      { title: "Admin", url: "/APP/admin/users/admins" },
-    ],
+    url: "/admin/users",
   },
   {
     title: "Pengaturan",
@@ -89,9 +84,7 @@ const teacherMenu: NavItem[] = [
   {
     title: "Kehadiran",
     icon: CalendarCheck,
-    items: [
-      { title: "Rekap Kehadiran", url: "/APP/teacher/attendance/recap" },
-    ],
+    items: [{ title: "Rekap Kehadiran", url: "/APP/teacher/attendance/recap" }],
   },
 ];
 

@@ -1,4 +1,7 @@
-import { auth } from "../lib/auth";
+import { eq } from "drizzle-orm";
+import { auth, db } from "../lib/auth";
+import * as schema from "../src/db/auth-schema";
+import type { UserRole } from "../src/types/auth-type";
 
 type APIError = {
   message?: string;
@@ -8,16 +11,23 @@ type APIError = {
 async function seed() {
   console.log("🌱 Generating seed data for users...");
 
-  const usersToSeed = [
+  const usersToSeed: {
+    name: string;
+    email: string;
+    password: string;
+    role: UserRole;
+  }[] = [
     {
       name: "Admin Ponpes",
       email: "admin@ponpes.com",
       password: "password123",
+      role: "admin",
     },
     {
-      name: "User Demo",
+      name: "Ustadz Demo",
       email: "demo@ponpes.com",
       password: "password123",
+      role: "teacher",
     },
   ];
 
@@ -30,13 +40,35 @@ async function seed() {
           name: user.name,
         },
       });
-      console.log(`✅ User berhasil dibuat: ${user.email} (ID: ${result.user.id})`);
+
+      // Update role di database secara langsung untuk memastikan nilai role tersimpan
+      await db
+        .update(schema.user)
+        .set({ role: user.role })
+        .where(eq(schema.user.id, result.user.id));
+
+      console.log(
+        `✅ User berhasil dibuat: ${user.email} | Role: ${user.role} (ID: ${result.user.id})`
+      );
     } catch (error: unknown) {
       const err = error as APIError | null;
       const errorMessage =
         err?.message || (error instanceof Error ? error.message : String(error));
       if (errorMessage.toLowerCase().includes("exist") || err?.status === 400) {
-        console.log(`⚠️ User sudah ada: ${user.email}`);
+        // Jika user sudah ada, pastikan role-nya diperbarui
+        const existingUsers = await db
+          .select()
+          .from(schema.user)
+          .where(eq(schema.user.email, user.email));
+
+        if (existingUsers.length > 0 && existingUsers[0]) {
+          await db
+            .update(schema.user)
+            .set({ role: user.role })
+            .where(eq(schema.user.id, existingUsers[0].id));
+        }
+
+        console.log(`⚠️ User sudah ada (role diperbarui): ${user.email} -> ${user.role}`);
       } else {
         console.error(`❌ Gagal membuat user ${user.email}:`, errorMessage);
       }
