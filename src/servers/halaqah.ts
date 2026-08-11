@@ -3,7 +3,8 @@
 import { headers } from "next/headers";
 import { auth, db } from "@/lib/auth";
 import { halaqah } from "@/db/halaqah-schema";
-import { eq } from "drizzle-orm";
+import { santri } from "@/db/santri-schema";
+import { eq, inArray } from "drizzle-orm";
 import {
   halaqahSchema,
   type HalaqahInput,
@@ -106,6 +107,45 @@ export async function deleteHalaqahAction(halaqahId: string) {
   }
 
   await db.delete(halaqah).where(eq(halaqah.id, halaqahId));
+
+  return { success: true };
+}
+
+/**
+ * Server action untuk menetapkan daftar santri ke sebuah halaqah.
+ */
+export async function assignSantriToHalaqahAction(
+  halaqahId: string,
+  santriIds: string[]
+) {
+  const reqHeaders = await headers();
+
+  const hasPermission = await auth.api.userHasPermission({
+    headers: reqHeaders,
+    body: {
+      permissions: {
+        halaqah: ["update"],
+      },
+    },
+  });
+
+  if (!hasPermission.success) {
+    throw new Error("Akses ditolak. Anda tidak memiliki izin mengelola anggota halaqah.");
+  }
+
+  // 1. Lepas halaqahId untuk santri yang sebelumnya di halaqah ini
+  await db
+    .update(santri)
+    .set({ halaqahId: null })
+    .where(eq(santri.halaqahId, halaqahId));
+
+  // 2. Tetapkan halaqahId untuk santri yang baru dipilih
+  if (santriIds.length > 0) {
+    await db
+      .update(santri)
+      .set({ halaqahId })
+      .where(inArray(santri.id, santriIds));
+  }
 
   return { success: true };
 }

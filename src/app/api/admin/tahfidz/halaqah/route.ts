@@ -3,7 +3,8 @@ import { headers } from "next/headers";
 import { auth, db } from "@/lib/auth";
 import { halaqah } from "@/db/halaqah-schema";
 import { user } from "@/db/auth-schema";
-import { desc, eq } from "drizzle-orm";
+import { santri } from "@/db/santri-schema";
+import { count, desc, eq } from "drizzle-orm";
 import type { HalaqahWithPembimbing } from "@/services/halaqah-service";
 
 export async function GET() {
@@ -26,19 +27,35 @@ export async function GET() {
       );
     }
 
-    const halaqahList: HalaqahWithPembimbing[] = await db
+    const santriCountSubquery = db
+      .select({
+        halaqahId: santri.halaqahId,
+        totalSantri: count(santri.id).as("total_santri"),
+      })
+      .from(santri)
+      .groupBy(santri.halaqahId)
+      .as("santri_count");
+
+    const rows = await db
       .select({
         id: halaqah.id,
         nama: halaqah.nama,
         pembimbingId: halaqah.pembimbingId,
         pembimbingNama: user.name,
         pembimbingEmail: user.email,
+        totalSantri: santriCountSubquery.totalSantri,
         createdAt: halaqah.createdAt,
         updatedAt: halaqah.updatedAt,
       })
       .from(halaqah)
       .leftJoin(user, eq(halaqah.pembimbingId, user.id))
+      .leftJoin(santriCountSubquery, eq(halaqah.id, santriCountSubquery.halaqahId))
       .orderBy(desc(halaqah.createdAt));
+
+    const halaqahList: HalaqahWithPembimbing[] = rows.map((r) => ({
+      ...r,
+      totalSantri: Number(r.totalSantri || 0),
+    }));
 
     return NextResponse.json(
       { halaqah: halaqahList },

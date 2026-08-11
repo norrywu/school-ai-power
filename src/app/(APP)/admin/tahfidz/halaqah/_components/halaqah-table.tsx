@@ -8,6 +8,7 @@ import { getHalaqahColumns } from "./halaqah-columns";
 import { HalaqahSkeleton } from "./halaqah-skeleton";
 import { HalaqahFormSheet } from "./halaqah-form-sheet";
 import { DeleteHalaqahDialog } from "./delete-halaqah-dialog";
+import { AssignSantriSheet } from "./assign-santri-sheet";
 
 export function HalaqahTable() {
   const { data: halaqahList = [], isLoading, error } = useHalaqah();
@@ -17,6 +18,9 @@ export function HalaqahTable() {
 
   const [halaqahToDelete, setHalaqahToDelete] = useState<HalaqahWithPembimbing | null>(null);
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+
+  const [halaqahToAssign, setHalaqahToAssign] = useState<HalaqahWithPembimbing | null>(null);
+  const [isAssignOpen, setIsAssignOpen] = useState(false);
 
   const handleEdit = (item: HalaqahWithPembimbing) => {
     setHalaqahToEdit(item);
@@ -28,11 +32,17 @@ export function HalaqahTable() {
     setIsDeleteOpen(true);
   };
 
+  const handleAssignSantri = (item: HalaqahWithPembimbing) => {
+    setHalaqahToAssign(item);
+    setIsAssignOpen(true);
+  };
+
   const columns = useMemo(
     () =>
       getHalaqahColumns({
         onEdit: handleEdit,
         onDelete: handleDelete,
+        onAssignSantri: handleAssignSantri,
       }),
     []
   );
@@ -53,7 +63,7 @@ export function HalaqahTable() {
     <>
       <DataTableCard<HalaqahWithPembimbing>
         title="Daftar Halaqah Tahfidz"
-        caption="Daftar seluruh kelompok halaqah tahfidz dan pembimbing ustadz di Pondok Pesantren."
+        caption="Daftar seluruh kelompok halaqah tahfidz, pembimbing ustadz, dan jumlah santri."
         columns={columns}
         data={halaqahList}
         rowKey={(item) => item.id}
@@ -70,6 +80,12 @@ export function HalaqahTable() {
         open={isDeleteOpen}
         onOpenChange={setIsDeleteOpen}
         halaqah={halaqahToDelete}
+      />
+
+      <AssignSantriSheet
+        open={isAssignOpen}
+        onOpenChange={setIsAssignOpen}
+        halaqah={halaqahToAssign}
       />
     </>
   );

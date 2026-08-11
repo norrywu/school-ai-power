@@ -5,6 +5,7 @@ import type { Halaqah } from "@/db/halaqah-schema";
 export type HalaqahWithPembimbing = Halaqah & {
   pembimbingNama?: string | null;
   pembimbingEmail?: string | null;
+  totalSantri?: number;
 };
 
 export const halaqahService = {

@@ -2,16 +2,18 @@ import type { DataTableColumn } from "@/components/common/data-table-card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import type { HalaqahWithPembimbing } from "@/services/halaqah-service";
-import { Pencil, Trash2 } from "lucide-react";
+import { Pencil, Trash2, Users } from "lucide-react";
 
 interface HalaqahColumnsOptions {
   onEdit?: (halaqah: HalaqahWithPembimbing) => void;
   onDelete?: (halaqah: HalaqahWithPembimbing) => void;
+  onAssignSantri?: (halaqah: HalaqahWithPembimbing) => void;
 }
 
 export function getHalaqahColumns({
   onEdit,
   onDelete,
+  onAssignSantri,
 }: HalaqahColumnsOptions = {}): DataTableColumn<HalaqahWithPembimbing>[] {
   return [
     {
@@ -25,6 +27,14 @@ export function getHalaqahColumns({
       render: (row) => (
         <Badge variant={row.pembimbingNama ? "outline" : "secondary"}>
           {row.pembimbingNama || "Belum Ada Pembimbing"}
+        </Badge>
+      ),
+    },
+    {
+      header: "Jumlah Santri",
+      render: (row) => (
+        <Badge variant="default" className="font-normal">
+          {row.totalSantri || 0} Santri
         </Badge>
       ),
     },
@@ -46,6 +56,16 @@ export function getHalaqahColumns({
       headClassName: "text-right",
       render: (row) => (
         <div className="flex items-center justify-end gap-2">
+          {onAssignSantri && (
+            <Button
+              variant="ghost"
+              size="icon-sm"
+              onClick={() => onAssignSantri(row)}
+              title="Kelola Anggota Santri"
+            >
+              <Users className="size-4 text-primary hover:text-primary/80" />
+            </Button>
+          )}
           {onEdit && (
             <Button
               variant="ghost"
