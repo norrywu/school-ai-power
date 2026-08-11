@@ -19,10 +19,12 @@ export const SANTRI_FORM_DEFAULTS: SantriInput = {
   nama: "",
   jenisKelamin: "L",
   kelasId: null,
+  halaqahId: null,
 };
 
 export function santriFields(
-  kelasOptions: SelectOption<string>[] = []
+  kelasOptions: SelectOption<string>[] = [],
+  halaqahOptions: SelectOption<string>[] = []
 ): SheetField<SantriInput>[] {
   return [
     {
@@ -44,6 +46,13 @@ export function santriFields(
       type: "select",
       placeholder: "Pilih kelas (opsional)",
       options: kelasOptions,
+    },
+    {
+      name: "halaqahId",
+      label: "Halaqah Tahfidz",
+      type: "select",
+      placeholder: "Pilih halaqah (opsional)",
+      options: halaqahOptions,
     },
   ];
 }

@@ -6,6 +6,7 @@ export const santriSchema = z.object({
   nama: z.string().min(2, "Nama minimal 2 karakter"),
   jenisKelamin: z.enum(JENIS_KELAMIN_VALUES),
   kelasId: z.string().nullable().optional(),
+  halaqahId: z.string().nullable().optional(),
 });
 
 export const updateSantriSchema = santriSchema.partial();

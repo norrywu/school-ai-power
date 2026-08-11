@@ -40,6 +40,7 @@ export async function createSantriAction(data: SantriInput) {
       nama: parsed.data.nama,
       jenisKelamin: parsed.data.jenisKelamin,
       kelasId: parsed.data.kelasId ?? null,
+      halaqahId: parsed.data.halaqahId ?? null,
     })
     .returning();
 
@@ -72,6 +73,7 @@ export async function updateSantriAction(
   if (data.nama !== undefined) updateData.nama = data.nama;
   if (data.jenisKelamin !== undefined) updateData.jenisKelamin = data.jenisKelamin;
   if (data.kelasId !== undefined) updateData.kelasId = data.kelasId;
+  if (data.halaqahId !== undefined) updateData.halaqahId = data.halaqahId;
 
   if (Object.keys(updateData).length === 0) {
     return { success: true };

@@ -2,18 +2,18 @@ import type { DataTableColumn } from "@/components/common/data-table-card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { JENIS_KELAMIN_LABELS } from "@/constants/santri-constant";
-import type { SantriWithKelas } from "@/services/santri-service";
+import type { SantriWithRelations } from "@/services/santri-service";
 import { Pencil, Trash2 } from "lucide-react";
 
 interface SantriColumnsOptions {
-  onEdit?: (santri: SantriWithKelas) => void;
-  onDelete?: (santri: SantriWithKelas) => void;
+  onEdit?: (santri: SantriWithRelations) => void;
+  onDelete?: (santri: SantriWithRelations) => void;
 }
 
 export function getSantriColumns({
   onEdit,
   onDelete,
-}: SantriColumnsOptions = {}): DataTableColumn<SantriWithKelas>[] {
+}: SantriColumnsOptions = {}): DataTableColumn<SantriWithRelations>[] {
   return [
     {
       header: "Nama Santri",
@@ -36,6 +36,14 @@ export function getSantriColumns({
           {row.kelasNama
             ? `${row.kelasNama} (${row.kelasTingkat})`
             : "Tanpa Kelas"}
+        </Badge>
+      ),
+    },
+    {
+      header: "Halaqah",
+      render: (row) => (
+        <Badge variant={row.halaqahNama ? "outline" : "secondary"}>
+          {row.halaqahNama || "Tanpa Halaqah"}
         </Badge>
       ),
     },

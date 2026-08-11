@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import { DataTableCard } from "@/components/common/data-table-card";
 import { useSantri } from "@/hooks/use-santri";
-import type { SantriWithKelas } from "@/services/santri-service";
+import type { SantriWithRelations } from "@/services/santri-service";
 import { getSantriColumns } from "./santri-columns";
 import { SantriSkeleton } from "./santri-skeleton";
 import { SantriFormSheet } from "./santri-form-sheet";
@@ -12,18 +12,18 @@ import { DeleteSantriDialog } from "./delete-santri-dialog";
 export function SantriTable() {
   const { data: santriList = [], isLoading, error } = useSantri();
 
-  const [santriToEdit, setSantriToEdit] = useState<SantriWithKelas | null>(null);
+  const [santriToEdit, setSantriToEdit] = useState<SantriWithRelations | null>(null);
   const [isEditOpen, setIsEditOpen] = useState(false);
 
-  const [santriToDelete, setSantriToDelete] = useState<SantriWithKelas | null>(null);
+  const [santriToDelete, setSantriToDelete] = useState<SantriWithRelations | null>(null);
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
 
-  const handleEdit = (santri: SantriWithKelas) => {
+  const handleEdit = (santri: SantriWithRelations) => {
     setSantriToEdit(santri);
     setIsEditOpen(true);
   };
 
-  const handleDelete = (santri: SantriWithKelas) => {
+  const handleDelete = (santri: SantriWithRelations) => {
     setSantriToDelete(santri);
     setIsDeleteOpen(true);
   };
@@ -51,9 +51,9 @@ export function SantriTable() {
 
   return (
     <>
-      <DataTableCard<SantriWithKelas>
+      <DataTableCard<SantriWithRelations>
         title="Daftar Santri"
-        caption="Daftar seluruh santri dan penempatan kelas di Pondok Pesantren."
+        caption="Daftar seluruh santri, penempatan kelas, dan halaqah di Pondok Pesantren."
         columns={columns}
         data={santriList}
         rowKey={(santri) => santri.id}

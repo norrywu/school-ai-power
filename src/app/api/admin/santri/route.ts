@@ -3,8 +3,9 @@ import { headers } from "next/headers";
 import { auth, db } from "@/lib/auth";
 import { santri } from "@/db/santri-schema";
 import { kelas } from "@/db/kelas-schema";
+import { halaqah } from "@/db/halaqah-schema";
 import { desc, eq } from "drizzle-orm";
-import type { SantriWithKelas } from "@/services/santri-service";
+import type { SantriWithRelations } from "@/services/santri-service";
 
 export async function GET() {
   try {
@@ -26,7 +27,7 @@ export async function GET() {
       );
     }
 
-    const santriList: SantriWithKelas[] = await db
+    const santriList: SantriWithRelations[] = await db
       .select({
         id: santri.id,
         nama: santri.nama,
@@ -34,11 +35,14 @@ export async function GET() {
         kelasId: santri.kelasId,
         kelasNama: kelas.nama,
         kelasTingkat: kelas.tingkat,
+        halaqahId: santri.halaqahId,
+        halaqahNama: halaqah.nama,
         createdAt: santri.createdAt,
         updatedAt: santri.updatedAt,
       })
       .from(santri)
       .leftJoin(kelas, eq(santri.kelasId, kelas.id))
+      .leftJoin(halaqah, eq(santri.halaqahId, halaqah.id))
       .orderBy(desc(santri.createdAt));
 
     return NextResponse.json(
