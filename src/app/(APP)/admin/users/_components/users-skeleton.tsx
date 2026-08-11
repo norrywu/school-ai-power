@@ -1,9 +1,36 @@
-import { Spinner } from "@/components/ui/spinner";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
 
-export function UsersSkeleton() {
+interface UsersSkeletonProps {
+  count?: number;
+}
+
+export function UsersSkeleton({ count = 5 }: UsersSkeletonProps) {
   return (
-    <div className="flex items-center justify-center p-12">
-      <Spinner className="size-8 text-primary" />
-    </div>
+    <Card>
+      <CardHeader className="space-y-2">
+        <Skeleton className="h-6 w-40" />
+        <Skeleton className="h-4 w-64" />
+      </CardHeader>
+      <CardContent className="space-y-4">
+        <div className="flex items-center justify-between border-b pb-3">
+          <Skeleton className="h-4 w-28" />
+          <Skeleton className="h-4 w-36" />
+          <Skeleton className="h-4 w-20" />
+          <Skeleton className="h-4 w-16" />
+        </div>
+        {Array.from({ length: count }).map((_, i) => (
+          <div
+            key={i}
+            className="flex items-center justify-between py-3 border-b border-border/40"
+          >
+            <Skeleton className="h-5 w-32" />
+            <Skeleton className="h-4 w-44" />
+            <Skeleton className="h-6 w-20 rounded-full" />
+            <Skeleton className="size-8 rounded-md" />
+          </div>
+        ))}
+      </CardContent>
+    </Card>
   );
 }

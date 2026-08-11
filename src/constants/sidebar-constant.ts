@@ -20,7 +20,7 @@ const adminMenu: NavItem[] = [
     title: "Santri",
     icon: UserCheck,
     items: [
-      { title: "Data Santri", url: "/APP/admin/students" },
+      { title: "Data Santri", url: "/admin/santri" },
       { title: "Kelas", url: "/APP/admin/classes" },
     ],
   },

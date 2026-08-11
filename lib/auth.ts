@@ -6,7 +6,7 @@ import { nextCookies } from "better-auth/next-js";
 import { admin } from "better-auth/plugins/admin";
 import * as schema from "../src/db/auth-schema";
 import { databaseUrl, betterAuthSecret } from "../src/environments";
-import { roles } from "../src/lib/permissions";
+import { ac, roles } from "../src/lib/permissions";
 
 const sql = neon(databaseUrl);
 export const db = drizzle(sql, { schema });
@@ -23,9 +23,10 @@ export const auth = betterAuth({
   plugins: [
     nextCookies(),
     admin({
+      ac,
+      roles,
       defaultRole: "teacher",
       adminRoles: ["admin"],
-      roles,
     }),
   ],
 });
