@@ -5,7 +5,11 @@ import { neon } from "@neondatabase/serverless";
 import { nextCookies } from "better-auth/next-js";
 import { admin } from "better-auth/plugins/admin";
 import * as schema from "../src/db/auth-schema";
-import { databaseUrl, betterAuthSecret } from "../src/environments";
+import {
+  databaseUrl,
+  betterAuthSecret,
+  betterAuthUrl,
+} from "../src/environments";
 import { ac, roles } from "../src/lib/permissions";
 
 const sql = neon(databaseUrl);
@@ -13,6 +17,7 @@ export const db = drizzle(sql, { schema });
 
 export const auth = betterAuth({
   secret: betterAuthSecret,
+  baseURL: betterAuthUrl || "http://localhost:3000",
   database: drizzleAdapter(db, {
     provider: "pg",
     schema,
