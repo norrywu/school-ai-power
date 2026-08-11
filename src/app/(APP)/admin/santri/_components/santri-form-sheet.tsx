@@ -1,15 +1,18 @@
 "use client";
 
+import { useMemo } from "react";
 import { TriggerSheet } from "@/components/sheet-trigger";
 import { SANTRI_FORM_DEFAULTS, santriFields } from "@/constants/santri-constant";
-import type { Santri } from "@/db/santri-schema";
 import { useCreateSantri, useUpdateSantri } from "@/hooks/use-santri";
+import { useKelas } from "@/hooks/use-kelas";
+import type { SantriWithKelas } from "@/services/santri-service";
+import type { SelectOption } from "@/types/form";
 import { santriSchema, type SantriInput } from "@/validations/santri-validation";
 
 interface SantriFormSheetProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  santriToEdit?: Santri | null;
+  santriToEdit?: SantriWithKelas | null;
 }
 
 export function SantriFormSheet({
@@ -17,15 +20,26 @@ export function SantriFormSheet({
   onOpenChange,
   santriToEdit,
 }: SantriFormSheetProps) {
+  const { data: kelasList = [] } = useKelas();
   const createSantri = useCreateSantri();
   const updateSantri = useUpdateSantri();
   const isEditing = Boolean(santriToEdit);
+
+  const kelasOptions: SelectOption<string>[] = useMemo(
+    () =>
+      kelasList.map((k) => ({
+        value: k.id,
+        label: `${k.nama} (${k.tingkat})`,
+      })),
+    [kelasList]
+  );
 
   const defaultValues: SantriInput =
     isEditing && santriToEdit
       ? {
           nama: santriToEdit.nama,
           jenisKelamin: santriToEdit.jenisKelamin,
+          kelasId: santriToEdit.kelasId ?? null,
         }
       : SANTRI_FORM_DEFAULTS;
 
@@ -50,12 +64,12 @@ export function SantriFormSheet({
     <TriggerSheet<SantriInput>
       open={open}
       onOpenChange={onOpenChange}
-      fields={santriFields()}
+      fields={santriFields(kelasOptions)}
       sheetTitle={isEditing ? "Ubah Data Santri" : "Tambah Santri Baru"}
       sheetDescription={
         isEditing
-          ? "Ubah data santri yang terdaftar."
-          : "Isi data santri baru di lingkungan Pondok Pesantren."
+          ? "Ubah data santri atau kelas yang terdaftar."
+          : "Isi data santri baru dan pilih kelas di lingkungan Pondok Pesantren."
       }
       defaultValues={defaultValues}
       schema={santriSchema}

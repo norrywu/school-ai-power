@@ -1,13 +1,13 @@
 "use client";
 
 import { ConfirmDeleteDialog } from "@/components/common/confirm-delete-dialog";
-import type { Santri } from "@/db/santri-schema";
 import { useDeleteSantri } from "@/hooks/use-santri";
+import type { SantriWithKelas } from "@/services/santri-service";
 
 interface DeleteSantriDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  santri: Santri | null;
+  santri: SantriWithKelas | null;
 }
 
 export function DeleteSantriDialog({

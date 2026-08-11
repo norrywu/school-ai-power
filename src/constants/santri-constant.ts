@@ -18,9 +18,12 @@ export const JENIS_KELAMIN_OPTIONS: SelectOption<"L" | "P">[] =
 export const SANTRI_FORM_DEFAULTS: SantriInput = {
   nama: "",
   jenisKelamin: "L",
+  kelasId: null,
 };
 
-export function santriFields(): SheetField<SantriInput>[] {
+export function santriFields(
+  kelasOptions: SelectOption<string>[] = []
+): SheetField<SantriInput>[] {
   return [
     {
       name: "nama",
@@ -34,6 +37,13 @@ export function santriFields(): SheetField<SantriInput>[] {
       type: "select",
       placeholder: "Pilih jenis kelamin",
       options: JENIS_KELAMIN_OPTIONS,
+    },
+    {
+      name: "kelasId",
+      label: "Kelas",
+      type: "select",
+      placeholder: "Pilih kelas (opsional)",
+      options: kelasOptions,
     },
   ];
 }
