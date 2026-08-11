@@ -62,7 +62,7 @@ const adminMenu: NavItem[] = [
 const teacherMenu: NavItem[] = [
   {
     title: "Dasbor Pengajar",
-    url: "/APP/teacher/dashboard",
+    url: "/teacher/dashboard",
     icon: LayoutDashboard,
   },
   {

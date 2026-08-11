@@ -44,7 +44,7 @@ export async function requireAuth(): Promise<AuthUser> {
 /**
  * Memastikan pengguna terautentikasi DAN memiliki peran `admin`.
  * - Jika belum login → redirect ke `/auth/login`.
- * - Jika sudah login tetapi bukan admin (mis. teacher) → redirect ke `/APP/teacher/dashboard`.
+ * - Jika sudah login tetapi bukan admin (mis. teacher) → redirect ke `/teacher/dashboard`.
  */
 export async function requireAdmin(): Promise<AuthUser> {
   const user = await getProfile();
@@ -54,7 +54,7 @@ export async function requireAdmin(): Promise<AuthUser> {
   }
 
   if (!isAdminRole(user.role)) {
-    redirect("/APP/teacher/dashboard");
+    redirect("/teacher/dashboard");
   }
 
   return user;
@@ -74,7 +74,7 @@ export async function requireRole(allowedRoles: UserRole[]): Promise<AuthUser> {
 
   if (!user.role || !allowedRoles.includes(user.role)) {
     const fallbackRoute =
-      user.role === "admin" ? "/APP/admin/dashboard" : "/APP/teacher/dashboard";
+      user.role === "admin" ? "/admin/dashboard" : "/teacher/dashboard";
     redirect(fallbackRoute);
   }
 

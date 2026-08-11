@@ -9,4 +9,9 @@ export const userSchema = z.object({
   role: z.enum(ROLE_VALUES),
 });
 
+export const updateUserSchema = userSchema.extend({
+  password: z.string().min(8, "Kata sandi minimal 8 karakter").or(z.literal("")),
+});
+
 export type UserInput = z.infer<typeof userSchema>;
+export type UpdateUserInput = z.infer<typeof updateUserSchema>;

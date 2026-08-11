@@ -42,7 +42,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
         roboto.variable,
       )}
     >
-      <body className="min-h-full flex flex-col">
+      <body className="min-h-full flex flex-col" suppressHydrationWarning>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"

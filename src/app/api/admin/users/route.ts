@@ -1,22 +1,31 @@
 import { NextResponse } from "next/server";
 import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
-import { getAdmin } from "@/lib/auth-guard";
 import type { AuthUser, UserRole } from "@/types/auth-type";
 
 export async function GET() {
   try {
-    const adminUser = await getAdmin();
+    const reqHeaders = await headers();
 
-    if (!adminUser) {
+    // Verifikasi izin akses membaca ("list") pada entitas "user"
+    const hasPermission = await auth.api.userHasPermission({
+      headers: reqHeaders,
+      body: {
+        permissions: {
+          user: ["list"],
+        },
+      },
+    });
+
+    if (!hasPermission.success) {
       return NextResponse.json(
-        { error: "Akses ditolak. Hanya admin yang diizinkan mengakses data pengguna." },
+        { error: "Akses ditolak. Anda tidak memiliki izin melihat data pengguna." },
         { status: 403 }
       );
     }
 
     const res = await auth.api.listUsers({
-      headers: await headers(),
+      headers: reqHeaders,
       query: {
         limit: 100,
       },
@@ -27,7 +36,7 @@ export async function GET() {
         { users: [] },
         {
           headers: {
-            "Cache-Control": "private, max-age=60, stale-while-revalidate=30",
+            "Cache-Control": "no-store, max-age=0",
           },
         }
       );
@@ -44,7 +53,7 @@ export async function GET() {
       { users },
       {
         headers: {
-          "Cache-Control": "private, max-age=60, stale-while-revalidate=30",
+          "Cache-Control": "no-store, max-age=0",
         },
       }
     );
