@@ -29,7 +29,6 @@ const adminMenu: NavItem[] = [
     icon: BookOpenCheck,
     items: [
       { title: "Halaqah", url: "/admin/tahfidz/halaqah" },
-      { title: "Setoran", url: "/admin/tahfidz/setoran" },
       { title: "Perkembangan", url: "/admin/tahfidz/progress" },
     ],
   },

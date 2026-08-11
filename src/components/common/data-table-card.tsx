@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Table,
   TableBody,
@@ -9,6 +9,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { TablePagination } from "@/components/common/table-pagination";
 
 export type DataTableColumn<T> = {
   header: string;
@@ -17,11 +18,13 @@ export type DataTableColumn<T> = {
   render: (row: T) => ReactNode;
 };
 
-/**
- * Card berisi table yang kolomnya digerakkan konfigurasi.
- * Sengaja bukan client component: `render` berupa fungsi, jadi
- * kolom harus dibangun di sisi server (mis. dari constants/).
- */
+export type PaginationProps = {
+  page: number;
+  totalPages: number;
+  totalRecords: number;
+  onPageChange: (page: number) => void;
+};
+
 export function DataTableCard<T>({
   title,
   headerAction,
@@ -30,6 +33,7 @@ export function DataTableCard<T>({
   data,
   rowKey,
   emptyMessage = "Belum ada data",
+  pagination,
 }: {
   title: string;
   headerAction?: ReactNode;
@@ -38,6 +42,7 @@ export function DataTableCard<T>({
   data: T[];
   rowKey: (row: T) => string;
   emptyMessage?: string;
+  pagination?: PaginationProps;
 }) {
   return (
     <Card>
@@ -83,6 +88,20 @@ export function DataTableCard<T>({
           </TableBody>
         </Table>
       </CardContent>
+
+      {pagination && (
+        <CardFooter className="flex flex-col sm:flex-row items-center justify-between border-t p-4 gap-4 text-xs text-muted-foreground">
+          <div>
+            Total <strong className="text-foreground">{pagination.totalRecords}</strong> data
+            (Halaman {pagination.page} dari {pagination.totalPages})
+          </div>
+          <TablePagination
+            page={pagination.page}
+            totalPages={pagination.totalPages}
+            onPageChange={pagination.onPageChange}
+          />
+        </CardFooter>
+      )}
     </Card>
   );
 }

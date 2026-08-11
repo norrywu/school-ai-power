@@ -61,6 +61,24 @@ export async function requireAdmin(): Promise<AuthUser> {
 }
 
 /**
+ * Memastikan pengguna terautentikasi DAN memiliki peran `teacher` atau `admin`.
+ * Jika belum login → redirect ke `/auth/login`.
+ */
+export async function requireTeacher(): Promise<AuthUser> {
+  const user = await getProfile();
+
+  if (!user) {
+    redirect(AUTH_ROUTES.login);
+  }
+
+  if (!isTeacherRole(user.role) && !isAdminRole(user.role)) {
+    redirect("/auth/login");
+  }
+
+  return user;
+}
+
+/**
  * Memastikan pengguna terautentikasi DAN memiliki salah satu peran yang diizinkan (`allowedRoles`).
  * - Jika belum login → redirect ke `/auth/login`.
  * - Jika sudah login tetapi perannya tidak sesuai → redirect ke rute bawaan perannya.
