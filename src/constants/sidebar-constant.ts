@@ -37,6 +37,7 @@ const adminMenu: NavItem[] = [
     icon: GraduationCap,
     items: [
       { title: "Mata Pelajaran", url: "/admin/academic/subjects" },
+      { title: "Penugasan Guru", url: "/admin/academic/teacher-subjects" },
       { title: "Jadwal", url: "/admin/academic/schedule" },
       { title: "Nilai", url: "/admin/academic/grades" },
     ],

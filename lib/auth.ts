@@ -4,7 +4,7 @@ import { drizzle } from "drizzle-orm/neon-http";
 import { neon } from "@neondatabase/serverless";
 import { nextCookies } from "better-auth/next-js";
 import { admin } from "better-auth/plugins/admin";
-import * as schema from "../src/db/auth-schema";
+import * as schema from "../src/db";
 import {
   databaseUrl,
   betterAuthSecret,

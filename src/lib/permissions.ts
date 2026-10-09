@@ -17,6 +17,8 @@ export const statement = {
   kelas: ["create", "list", "get", "update", "delete"],
   halaqah: ["create", "list", "get", "update", "delete"],
   setoran_hafalan: ["create", "list", "get", "update", "delete"],
+  mata_pelajaran: ["create", "list", "get", "update", "delete"],
+  guru_pelajaran: ["create", "list", "get", "update", "delete"],
 } as const;
 
 export const ac = createAccessControl(statement);
@@ -38,6 +40,8 @@ export const adminRole = ac.newRole({
   kelas: ["create", "list", "get", "update", "delete"],
   halaqah: ["create", "list", "get", "update", "delete"],
   setoran_hafalan: ["create", "list", "get", "update", "delete"],
+  mata_pelajaran: ["create", "list", "get", "update", "delete"],
+  guru_pelajaran: ["create", "list", "get", "update", "delete"],
 });
 
 export const teacherRole = ac.newRole({
@@ -46,6 +50,8 @@ export const teacherRole = ac.newRole({
   kelas: ["list", "get"],
   halaqah: ["list", "get"],
   setoran_hafalan: ["create", "list", "get", "update", "delete"],
+  mata_pelajaran: ["list", "get"],
+  guru_pelajaran: ["list", "get"],
 });
 
 export const roles = {
